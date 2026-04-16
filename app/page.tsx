@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Card, ProgressBar, StatusBadge } from "@/components/ui";
-import { dashboardMetrics, projects, valueCards, workflowSteps } from "@/data/mock-data";
+import { dashboardMetrics, processingTypeOptions, projects, valueCards, workflowSteps } from "@/data/mock-data";
 
 export default function DashboardPage() {
   return (
@@ -8,17 +8,17 @@ export default function DashboardPage() {
       <Card className="grid gap-5 lg:grid-cols-[1.3fr_1fr]">
         <div>
           <p className="text-xs text-blue-200">恵雅堂 クライアント確認用デモ</p>
-          <h3 className="mt-1 text-2xl font-semibold">学校写真・アルバム制作向けワークフロー支援</h3>
+          <h3 className="mt-1 text-2xl font-semibold">学校写真業務の4ワークフロー統合管理</h3>
           <p className="mt-3 text-sm text-slate-300">
-            本システムは「写真アップロード → 名簿/札番号/顔照合 → ベストショット選定 → レイアウト確認 → 書き出し前確認」
-            を一連で支援する業務UIです。
+            個人写真・クラブ写真・教員照合・人物検出を共通UIで扱い、写真選定から照合確認、一覧出力までの実務を整理します。
           </p>
-          <div className="mt-4 flex flex-wrap gap-2 text-xs">
-            <StatusBadge tone="info">名簿照合</StatusBadge>
-            <StatusBadge tone="info">札番号照合</StatusBadge>
-            <StatusBadge tone="info">顔照合</StatusBadge>
-            <StatusBadge tone="ok">推奨写真選定</StatusBadge>
-            <StatusBadge tone="warn">書き出し前確認</StatusBadge>
+          <div className="mt-4 grid gap-2 md:grid-cols-2">
+            {processingTypeOptions.map((p) => (
+              <div key={p.id} className="rounded-md border border-slate-800 bg-slate-900/60 p-2 text-xs">
+                <p className="font-semibold text-slate-100">{p.label}</p>
+                <p className="text-slate-400">{p.description}</p>
+              </div>
+            ))}
           </div>
         </div>
         <div className="rounded-xl border border-slate-700 bg-slate-950/70 p-4">
@@ -36,7 +36,7 @@ export default function DashboardPage() {
       </Card>
 
       <Card>
-        <h3 className="text-lg font-semibold">業務フロー</h3>
+        <h3 className="text-lg font-semibold">共通業務フロー</h3>
         <div className="mt-4 grid gap-3 md:grid-cols-5">
           {workflowSteps.map((step, index) => (
             <div key={step} className="rounded-lg border border-slate-800 bg-slate-900/60 p-3">
@@ -67,7 +67,10 @@ export default function DashboardPage() {
               <div key={project.id} className="rounded-lg border border-slate-800 bg-slate-900/60 p-3">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <p className="text-sm font-semibold">{project.id} / {project.school} {project.className}</p>
-                  <StatusBadge tone={project.status === "レビュー待ち" ? "warn" : project.status === "完了" ? "ok" : "default"}>{project.status}</StatusBadge>
+                  <div className="flex gap-2">
+                    <StatusBadge tone="info">{project.workflowType}</StatusBadge>
+                    <StatusBadge tone={project.status === "レビュー待ち" ? "warn" : project.status === "完了" ? "ok" : "default"}>{project.status}</StatusBadge>
+                  </div>
                 </div>
                 <p className="mt-1 text-xs text-slate-400">担当: {project.photographer} / 取込日: {project.uploadedAt}</p>
                 <div className="mt-2"><ProgressBar value={project.progress} /></div>
@@ -83,7 +86,7 @@ export default function DashboardPage() {
           <div className="mt-3 space-y-2">
             {projects.map((project) => (
               <div key={project.id} className="rounded-lg border border-slate-800 bg-slate-900/60 p-3 text-xs">
-                <p className="mb-1 font-medium">{project.id}</p>
+                <p className="mb-1 font-medium">{project.id}（{project.workflowType}）</p>
                 <div className="flex flex-wrap gap-2">
                   <StatusBadge tone={project.matchState.roster === "完了" ? "ok" : "warn"}>名簿照合: {project.matchState.roster}</StatusBadge>
                   <StatusBadge tone={project.matchState.tag === "完了" ? "ok" : "warn"}>札番号照合: {project.matchState.tag}</StatusBadge>
