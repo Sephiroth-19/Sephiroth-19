@@ -14,7 +14,7 @@ export function MainShell({ children }: { children: React.ReactNode }) {
         <div className="mb-6 panel p-4">
           <p className="text-xs uppercase tracking-wider text-slate-300">Keigado Demo</p>
           <h1 className="mt-1 text-xl font-bold">恵雅堂 学校写真管理</h1>
-          <p className="mt-2 text-xs text-slate-400">School Portrait Workflow UI</p>
+          <p className="mt-2 text-xs text-slate-400">クライアント確認用ワークフロー</p>
         </div>
         <nav className="space-y-2">
           {navItems.map((item) => {
